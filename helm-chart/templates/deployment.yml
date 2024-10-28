@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taskmaster-deployment
+spec:
+  selector:
+    matchLabels:
+      app: taskmaster
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: taskmaster
+    spec:
+      containers:
+        - name: taskmaster
+          image: ishwar23/taskmaster:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - mountPath: "/data"  
+              name: taskmaster-storage
+      volumes:
+        - name: taskmaster-storage
+          persistentVolumeClaim:
+            claimName: taskmaster-pvc
